@@ -17,14 +17,14 @@ class NetworkManager {
     
     let url = "http://jsonplaceholder.typicode.com/photos"
     
-    func requestPhotos (completion: @escaping ([Photo]?) -> Void) {
+    func requestPhotos (completion: @escaping ([Photo]?, NSError?) -> Void) {
         
         Alamofire.request(url).responseArray {(response: DataResponse<[Photo]>) in
             
             //test
             let photoArray:[Photo]? = response.result.value
             
-            completion(photoArray)
+            completion(photoArray,nil)
         }
     }
 }

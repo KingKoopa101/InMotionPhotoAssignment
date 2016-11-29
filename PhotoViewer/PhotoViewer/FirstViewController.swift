@@ -31,7 +31,12 @@ class FirstViewController: UIViewController, UICollectionViewDataSource, UIColle
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        
         getPhotos()
+        
+        let test = Photo.getPhotosInOrderByAlbum(unorganizedPhotos: photos)
+        
+        //print(test)
     }
     
     func addRefreshControl (){
@@ -42,12 +47,19 @@ class FirstViewController: UIViewController, UICollectionViewDataSource, UIColle
     }
     
     func getPhotos (){
-        NetworkManager.sharedInstance.requestPhotos{ photos in
-            print(photos)
-            //guard
+        NetworkManager.sharedInstance.requestPhotos{ photos, error in
+            
+            if error != nil{
+                //handle error
+            }
+            
+            //print(photos!)
+            
+            //todo guard
             self.photos = photos!
             self.collectionView.reloadData()
             self.refreshControl.endRefreshing()
+            let albumDictionary = Photo.getPhotosInOrderByAlbum(unorganizedPhotos: self.photos)
         }
     }
 }
