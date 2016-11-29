@@ -9,9 +9,6 @@
 //http://jsonplaceholder.typicode.com/photos
 
 import UIKit
-import Alamofire
-import AlamofireObjectMapper
-import ObjectMapper
 
 class FirstViewController: UIViewController {
     
@@ -19,7 +16,6 @@ class FirstViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         // Do any additional setup after loading the view, typically from a nib.
     }
 
@@ -38,45 +34,6 @@ class FirstViewController: UIViewController {
             print(photos)
             //guard
             self.photos = photos!
-        }
-    }
-}
-
-class Photo : Mappable {
-    
-    var albumId: String?
-    var id: String?
-    var thumbnailUrl: String?
-    var title: String?
-    var url: String?
-    
-    required init?(map: Map) {
-        
-    }
-    
-    func mapping(map: Map) {
-        albumId    <- map["albumId"]
-        id         <- map["id"]
-        thumbnailUrl      <- map["thumbnailUrl"]
-        title       <- map["title"]
-        url  <- map["url"]
-    }
-}
-
-class NetworkManager {
-    
-    static let sharedInstance = NetworkManager()
-    
-    let url = "http://jsonplaceholder.typicode.com/photos"
-    
-    func requestPhotos (completion: @escaping ([Photo]?) -> Void) {
-        
-        Alamofire.request(url).responseArray {(response: DataResponse<[Photo]>) in
-            
-            //test
-            let photoArray:[Photo]? = response.result.value
-            
-            completion(photoArray)
         }
     }
 }
