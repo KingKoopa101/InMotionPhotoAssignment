@@ -10,10 +10,14 @@
 
 import UIKit
 
-class FirstViewController: UIViewController {
+class FirstViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
     
     var photos : [Photo]  = []
-
+    
+    fileprivate let reuseIdentifier = "PhotoCollectionViewCell"
+    
+    @IBOutlet weak var collectionView: UICollectionView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -30,10 +34,47 @@ class FirstViewController: UIViewController {
     
     func getPhotos (){
         NetworkManager.sharedInstance.requestPhotos{ photos in
-            
             print(photos)
             //guard
             self.photos = photos!
+            self.collectionView.reloadData()
         }
+    }
+}
+
+extension FirstViewController {
+    
+    //1
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
+    
+    //2
+    func collectionView(_ collectionView: UICollectionView,
+                                 numberOfItemsInSection section: Int) -> Int {
+        return photos.count
+    }
+    
+    //3
+    func collectionView(_ collectionView: UICollectionView,
+                                 cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier,
+                                                      for: indexPath) as! PhotoCollectionViewCell
+        // Configure the cell
+        cell.updateWithPhoto(photo:photos[indexPath.row])
+        
+        return cell
+    }
+}
+
+import SDWebImage
+
+class PhotoCollectionViewCell : UICollectionViewCell {
+    
+    @IBOutlet weak var imageView: UIImageView!
+    
+    func updateWithPhoto(photo:Photo){
+        imageView.sd_setImage(with: NSURL(string: photo.thumbnailUrl!) as URL!)
     }
 }
