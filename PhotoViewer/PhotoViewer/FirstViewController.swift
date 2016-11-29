@@ -13,6 +13,7 @@ import UIKit
 class FirstViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
     
     var photos : [Photo]  = []
+    var refreshControl:UIRefreshControl!
     
     fileprivate let reuseIdentifier = "PhotoCollectionViewCell"
     
@@ -20,6 +21,7 @@ class FirstViewController: UIViewController, UICollectionViewDataSource, UIColle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        addRefreshControl()
         // Do any additional setup after loading the view, typically from a nib.
     }
 
@@ -32,30 +34,35 @@ class FirstViewController: UIViewController, UICollectionViewDataSource, UIColle
         getPhotos()
     }
     
+    func addRefreshControl (){
+        self.refreshControl = UIRefreshControl()
+        self.refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
+        self.refreshControl.addTarget(self, action: #selector(getPhotos), for: .valueChanged)
+        collectionView!.addSubview(refreshControl)
+    }
+    
     func getPhotos (){
         NetworkManager.sharedInstance.requestPhotos{ photos in
             print(photos)
             //guard
             self.photos = photos!
             self.collectionView.reloadData()
+            self.refreshControl.endRefreshing()
         }
     }
 }
 
 extension FirstViewController {
     
-    //1
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
     
-    //2
     func collectionView(_ collectionView: UICollectionView,
                                  numberOfItemsInSection section: Int) -> Int {
         return photos.count
     }
     
-    //3
     func collectionView(_ collectionView: UICollectionView,
                                  cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
