@@ -23,6 +23,9 @@ class Cloud {
         
         Alamofire.request(url).responseArray {(response: DataResponse<[Photo]>) in
             
+            if response.result.error != nil {
+                completion(nil,response.result.error as NSError?)
+            }
             //test
             let photoArray:[Photo]? = response.result.value
             
@@ -34,18 +37,14 @@ class Cloud {
         
         Alamofire.request(url).responseArray {(response: DataResponse<[Photo]>) in
             
-            //        if error != nil{
-            //        //handle error
-            //        }
-            
+            if response.result.error != nil {
+                completion(nil,response.result.error as NSError?)
+            }
             
             guard let photos :[Photo] = response.result.value else {
-                //show("No name to submit")
                 completion(nil, NSError())
                 return
             }
-            
-            
             
             var organizedPhotosDict:[Int:[Photo]] = [:]
             var uniqueAlbums:[Int] = []
@@ -64,6 +63,7 @@ class Cloud {
             self.refreshTime = Date()
             completion(organizedPhotosDict,nil)
         }
+        
         //        let distinctAlbums1 = Set(unorganizedPhotos.map{$0.albumId}) //- wasnt able to get this working because of ObjectMapper implementation
         //
         //        for album in distinctAlbums1{
