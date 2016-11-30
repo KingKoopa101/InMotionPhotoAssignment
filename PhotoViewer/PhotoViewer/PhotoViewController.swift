@@ -10,10 +10,12 @@
 
 import UIKit
 
-class FirstViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
+class PhotoViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
     
     var photos : [Photo]  = []
-    var refreshControl:UIRefreshControl!
+    var screenSize: CGRect!
+    var screenWidth: CGFloat!
+    var screenHeight: CGFloat!
     
     fileprivate let reuseIdentifier = "PhotoCollectionViewCell"
     
@@ -21,30 +23,35 @@ class FirstViewController: UIViewController, UICollectionViewDataSource, UIColle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        addRefreshControl()
+        setupLayout()
+        //addRefreshControl()
+        self.collectionView.reloadData()
         // Do any additional setup after loading the view, typically from a nib.
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        // Dispose of any resources that can be   recreated.
     }
     
     override func viewDidAppear(_ animated: Bool) {
         
-        getPhotos()
-        
-        let test = Photo.getPhotosInOrderByAlbum(unorganizedPhotos: photos)
-        
-        //print(test)
     }
     
-    func addRefreshControl (){
-        self.refreshControl = UIRefreshControl()
-        self.refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
-        self.refreshControl.addTarget(self, action: #selector(getPhotos), for: .valueChanged)
-        collectionView!.addSubview(refreshControl)
+    func setupLayout(){
+        screenSize = UIScreen.main.bounds
+        screenWidth = screenSize.width
+        screenHeight = screenSize.height
+        
+        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
+        layout.sectionInset = UIEdgeInsets(top: 5, left: 0, bottom: 10, right: 0)
+        layout.itemSize = CGSize(width: screenWidth / 2, height: screenWidth / 2)
+        layout.minimumInteritemSpacing = 0
+        layout.minimumLineSpacing = 0
+        collectionView!.collectionViewLayout = layout
     }
+    
+    
     
     func getPhotos (){
         NetworkManager.sharedInstance.requestPhotos{ photos, error in
@@ -58,13 +65,13 @@ class FirstViewController: UIViewController, UICollectionViewDataSource, UIColle
             //todo guard
             self.photos = photos!
             self.collectionView.reloadData()
-            self.refreshControl.endRefreshing()
-            let albumDictionary = Photo.getPhotosInOrderByAlbum(unorganizedPhotos: self.photos)
+            //self.refreshControl.endRefreshing()
+            //let albumDictionary = Photo.getPhotosInOrderByAlbum(unorganizedPhotos: self.photos)
         }
     }
 }
 
-extension FirstViewController {
+extension PhotoViewController {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
@@ -80,7 +87,8 @@ extension FirstViewController {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier,
                                                       for: indexPath) as! PhotoCollectionViewCell
-        // Configure the cell
+        cell.frame.size.width = screenWidth / 2
+        cell.frame.size.height = screenWidth / 2
         cell.updateWithPhoto(photo:photos[indexPath.row])
         
         return cell
@@ -94,6 +102,6 @@ class PhotoCollectionViewCell : UICollectionViewCell {
     @IBOutlet weak var imageView: UIImageView!
     
     func updateWithPhoto(photo:Photo){
-        imageView.sd_setImage(with: NSURL(string: photo.thumbnailUrl!) as URL!)
+        imageView.sd_setImage(with: NSURL(string: photo.url!) as URL!)
     }
 }
