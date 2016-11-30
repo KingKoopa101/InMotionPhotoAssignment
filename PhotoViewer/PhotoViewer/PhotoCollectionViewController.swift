@@ -6,8 +6,6 @@
 //  Copyright © 2016 Alberto Lopez. All rights reserved.
 //
 
-//http://jsonplaceholder.typicode.com/photos
-
 import UIKit
 
 class PhotoCollectionViewController: UICollectionViewController, UIViewControllerPreviewingDelegate {
@@ -16,8 +14,7 @@ class PhotoCollectionViewController: UICollectionViewController, UIViewControlle
     var screenSize: CGRect!
     var screenWidth: CGFloat!
     var screenHeight: CGFloat!
-    
-    fileprivate let reuseIdentifier = "PhotoCollectionViewCell"
+    var sourceCell: UICollectionViewCell?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,6 +25,7 @@ class PhotoCollectionViewController: UICollectionViewController, UIViewControlle
         }
         
         self.collectionView?.reloadData()
+        self.navigationController?.delegate = self
     }
 
     override func didReceiveMemoryWarning() {
@@ -37,6 +35,20 @@ class PhotoCollectionViewController: UICollectionViewController, UIViewControlle
     
     override func viewDidAppear(_ animated: Bool) {
         
+    }
+    
+    /* pop over when selected */
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "PhotoViewControllerSegue"{
+            
+            if let vc = segue.destination as? PhotoViewController,
+                let cell = sender as? PhotoCollectionViewCell{
+                sourceCell = cell
+                let index = collectionView?.indexPath(for: cell)
+                vc.photo = photos[(index?.row)!]
+            }
+        }
     }
     
     /*Force Touch*/
@@ -74,8 +86,12 @@ class PhotoCollectionViewController: UICollectionViewController, UIViewControlle
         layout.minimumInteritemSpacing = 0
         layout.minimumLineSpacing = 0
         collectionView!.collectionViewLayout = layout
+        
+        viewDidLayoutSubviews()
     }
 }
+
+/*CollectionView Delegates and Datasource*/
 
 extension PhotoCollectionViewController {
     
@@ -91,7 +107,7 @@ extension PhotoCollectionViewController {
     override func collectionView(_ collectionView: UICollectionView,
                                  cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier,
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoCollectionViewCell.reuseIdentifierString,
                                                       for: indexPath) as! PhotoCollectionViewCell
         cell.frame.size.width = screenWidth / 2
         cell.frame.size.height = screenWidth / 2
@@ -99,23 +115,18 @@ extension PhotoCollectionViewController {
         
         return cell
     }
-    
-    override func collectionView(_ collectionView: UICollectionView,
-                                 didSelectItemAt indexPath: IndexPath)  {
-        guard let photoVC = storyboard?.instantiateViewController(withIdentifier: "PhotoViewController") as? PhotoViewController else { return }
-        photoVC.photo = photos[indexPath.row]
-        
-        show(photoVC, sender:self)
-    }
 }
 
-import SDWebImage
+//MARK: CollectionPushAndPoppable
+extension PhotoCollectionViewController: CollectionPushAndPoppable {}
 
-class PhotoCollectionViewCell : UICollectionViewCell {
-    
-    @IBOutlet weak var imageView: UIImageView!
-    
-    func updateWithPhoto(photo:Photo){
-        imageView.sd_setImage(with: NSURL(string: photo.url!) as URL!)
+
+//MARK: UINavigationControllerDelegate
+extension PhotoCollectionViewController: UINavigationControllerDelegate {
+    func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationControllerOperation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        // In this method belonging to the protocol UINavigationControllerDelegate you must
+        // return an animator conforming to the protocol UIViewControllerAnimatedTransitioning.
+        // To perform the Pop in and Out animation PopInAndOutAnimator should be returned
+        return PopInAndOutAnimator(operation: operation)
     }
 }

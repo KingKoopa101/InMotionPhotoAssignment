@@ -14,6 +14,7 @@ class AlbumCollectionViewController: UICollectionViewController  {
     var screenSize: CGRect!
     var screenWidth: CGFloat!
     var screenHeight: CGFloat!
+    var sourceCell: UICollectionViewCell?
     var refreshControlString: String{
         get {
             guard let time = Cloud.sharedInstance.refreshTime else{
@@ -22,8 +23,6 @@ class AlbumCollectionViewController: UICollectionViewController  {
             return time.toString() }
     }
     
-    fileprivate let reuseIdentifier = "AlbumCollectionViewCell"
-    
     var albums:[Int:[Photo]] = [:]
 
     override func viewDidLoad() {
@@ -31,7 +30,6 @@ class AlbumCollectionViewController: UICollectionViewController  {
         setupLayout()
         getAlbums()
         addRefreshControl()
-        // Do any additional setup after loading the view, typically from a nib.
     }
 
     override func didReceiveMemoryWarning() {
@@ -62,17 +60,19 @@ class AlbumCollectionViewController: UICollectionViewController  {
         
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top: 5, left: 0, bottom: 10, right: 0)
-        layout.itemSize = CGSize(width: screenWidth / 3, height: screenWidth / 3)
-        layout.minimumInteritemSpacing = 0
-        layout.minimumLineSpacing = 0
+        layout.itemSize = CGSize(width: (screenWidth / 3 - 6) , height: (screenWidth / 3 + 4))
+        layout.minimumInteritemSpacing = 2
+        layout.minimumLineSpacing = 2
         collectionView!.collectionViewLayout = layout
     }
+    
+    /*Request data*/
     
     func getAlbums () {
         Cloud.sharedInstance.getAlbums{albums, error in
             
             if error != nil{
-                //handle error
+                self.showAlert(error:error!)
                 return
             }
             
@@ -82,6 +82,10 @@ class AlbumCollectionViewController: UICollectionViewController  {
             
             self.updateView(withAlbums:albums!)
         }
+    }
+    
+    @IBAction func refreshbuttonPressed(_ sender: Any) {
+        getAlbums()
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -97,6 +101,8 @@ class AlbumCollectionViewController: UICollectionViewController  {
     }
 }
 
+/*CollectionView Delegates and Datasource*/
+
 extension AlbumCollectionViewController {
     
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -111,7 +117,7 @@ extension AlbumCollectionViewController {
     override func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier,
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AlbumCollectionViewCell.reuseIdentifierString,
                                                       for: indexPath) as! AlbumCollectionViewCell
         
         // Configure the cell
@@ -125,29 +131,5 @@ extension AlbumCollectionViewController {
         cell.updateWithPhotos(photos:albumPhotos, albumId:indexPath.row + 1)
         
         return cell
-    }
-    
-    
-    
-    override func collectionView(_ collectionView: UICollectionView,
-                                 didSelectItemAt indexPath: IndexPath)  {
-        self.performSegue(withIdentifier: "PhotoCollectionSegue", sender: self)
-    }
-}
-
-class AlbumCollectionViewCell : UICollectionViewCell {
-    
-    @IBOutlet weak var imageViewLeftTop: UIImageView!
-    @IBOutlet weak var imageViewRightTop: UIImageView!
-    @IBOutlet weak var imageViewRightBottom: UIImageView!
-    @IBOutlet weak var imageViewLeftBottom: UIImageView!
-    @IBOutlet weak var albumIdLabel: UILabel!
-    
-    func updateWithPhotos(photos:[Photo], albumId: Int){
-        imageViewLeftTop.sd_setImage(with: NSURL(string: photos[0].thumbnailUrl!) as URL!)
-        imageViewRightTop.sd_setImage(with: NSURL(string: photos[1].thumbnailUrl!) as URL!)
-        imageViewRightBottom.sd_setImage(with: NSURL(string: photos[2].thumbnailUrl!) as URL!)
-        imageViewLeftBottom.sd_setImage(with: NSURL(string: photos[3].thumbnailUrl!) as URL!)
-        albumIdLabel.text = "\(albumId)"
     }
 }

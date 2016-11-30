@@ -33,42 +33,51 @@ class Cloud {
         }
     }
     
-    func getAlbums(completion: @escaping ([Int:[Photo]]?, NSError?) -> Void) {
+    func getAlbums(completion: @escaping ([Int:[Photo]]?, Error?) -> Void) {
         
         Alamofire.request(url).responseArray {(response: DataResponse<[Photo]>) in
             
             if response.result.error != nil {
-                completion(nil,response.result.error as NSError?)
+                completion(nil,response.result.error)
             }
             
             guard let photos :[Photo] = response.result.value else {
-                completion(nil, NSError())
+                completion([:], nil)
                 return
             }
             
-            var organizedPhotosDict:[Int:[Photo]] = [:]
-            var uniqueAlbums:[Int] = []
             
-            for photo in photos{
-                
-                if let duplicateAlbum : [Photo] = organizedPhotosDict[photo.albumId!]{
-                    var d : [Photo]  = organizedPhotosDict[photo.albumId!]! as [Photo]
-                    d.append(photo)
-                    organizedPhotosDict[photo.albumId!] = d
-                }else{
-                    uniqueAlbums.append(photo.albumId!)
-                    organizedPhotosDict[photo.albumId!] = [photo]
-                }
-            }
             self.refreshTime = Date()
-            completion(organizedPhotosDict,nil)
+            completion(self.sortPhotosByAlbum(photos:photos),nil)
         }
+    }
+    
+    /*Putting this function here because ideally the request would take parameters to be able to sort by album and return an "album" array*/
+    
+    private func sortPhotosByAlbum(photos:[Photo]) -> [Int:[Photo]]{
+        var organizedPhotosDict:[Int:[Photo]] = [:]
+        var uniqueAlbums:[Int] = []
         
-        //        let distinctAlbums1 = Set(unorganizedPhotos.map{$0.albumId}) //- wasnt able to get this working because of ObjectMapper implementation
-        //
-        //        for album in distinctAlbums1{
-        //            let albumPhotos = unorganizedPhotos.filter({ $0.albumId == album})
-        //            organizedPhotosDict[album] = albumPhotos
-        //        }
+        for photo in photos{
+            
+            if let duplicateAlbum : [Photo] = organizedPhotosDict[photo.albumId!]{
+                var duplicateAlbumMutableCopy : [Photo] = duplicateAlbum 
+                duplicateAlbumMutableCopy.append(photo)
+                organizedPhotosDict[photo.albumId!] = duplicateAlbumMutableCopy
+            }else{
+                uniqueAlbums.append(photo.albumId!)
+                organizedPhotosDict[photo.albumId!] = [photo]
+            }
+        }
+        return organizedPhotosDict
+    }
+    
+    func downloadRequest(){
+        /*WIP: trying to use alamo fire download to store locally with object mapper, not sure if possible, can fall back on manually saving .plist*/
+        Alamofire.download(url).responseData { response in
+            if let data = response.result.value {
+                
+            }
+        }
     }
 }

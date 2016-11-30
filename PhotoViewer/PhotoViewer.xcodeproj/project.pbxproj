@@ -7,10 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		747912701DEF08D900067B7A /* AlbumCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7479126F1DEF08D900067B7A /* AlbumCollectionViewCell.swift */; };
+		747912721DEF090000067B7A /* PhotoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747912711DEF090000067B7A /* PhotoCollectionViewCell.swift */; };
 		74A620C31DECFC0F0034ABAB /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A620C21DECFC0F0034ABAB /* Photo.swift */; };
 		74A620C51DECFC5B0034ABAB /* Cloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A620C41DECFC5B0034ABAB /* Cloud.swift */; };
 		74A620C71DEE62110034ABAB /* DateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A620C61DEE62110034ABAB /* DateExtensions.swift */; };
 		74A620C91DEE70940034ABAB /* PhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A620C81DEE70940034ABAB /* PhotoViewController.swift */; };
+		74A620D01DEE86840034ABAB /* CollectionPushAndPoppable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A620CC1DEE86840034ABAB /* CollectionPushAndPoppable.swift */; };
+		74A620D11DEE86840034ABAB /* PopInAndOutAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A620CD1DEE86840034ABAB /* PopInAndOutAnimator.swift */; };
+		74A620D21DEE86840034ABAB /* UIView+Screenshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A620CF1DEE86840034ABAB /* UIView+Screenshot.swift */; };
 		74DE54A61DECD2E100259BC7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DE54A51DECD2E100259BC7 /* AppDelegate.swift */; };
 		74DE54A81DECD2E100259BC7 /* PhotoCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DE54A71DECD2E100259BC7 /* PhotoCollectionViewController.swift */; };
 		74DE54AA1DECD2E100259BC7 /* AlbumCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DE54A91DECD2E100259BC7 /* AlbumCollectionViewController.swift */; };
@@ -22,10 +27,16 @@
 
 /* Begin PBXFileReference section */
 		2B5DF3145FBDC4A71A703D5A /* Pods-PhotoViewer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PhotoViewer.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PhotoViewer/Pods-PhotoViewer.debug.xcconfig"; sourceTree = "<group>"; };
+		7479126F1DEF08D900067B7A /* AlbumCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlbumCollectionViewCell.swift; sourceTree = "<group>"; };
+		747912711DEF090000067B7A /* PhotoCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoCollectionViewCell.swift; sourceTree = "<group>"; };
 		74A620C21DECFC0F0034ABAB /* Photo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
 		74A620C41DECFC5B0034ABAB /* Cloud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cloud.swift; sourceTree = "<group>"; };
 		74A620C61DEE62110034ABAB /* DateExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateExtensions.swift; sourceTree = "<group>"; };
 		74A620C81DEE70940034ABAB /* PhotoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoViewController.swift; sourceTree = "<group>"; };
+		74A620CC1DEE86840034ABAB /* CollectionPushAndPoppable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionPushAndPoppable.swift; sourceTree = "<group>"; };
+		74A620CD1DEE86840034ABAB /* PopInAndOutAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopInAndOutAnimator.swift; sourceTree = "<group>"; };
+		74A620CE1DEE86840034ABAB /* PopInAndOutCollectionViewTransition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopInAndOutCollectionViewTransition.h; sourceTree = "<group>"; };
+		74A620CF1DEE86840034ABAB /* UIView+Screenshot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Screenshot.swift"; sourceTree = "<group>"; };
 		74DE54A21DECD2E000259BC7 /* PhotoViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotoViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		74DE54A51DECD2E100259BC7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		74DE54A71DECD2E100259BC7 /* PhotoCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCollectionViewController.swift; sourceTree = "<group>"; };
@@ -50,6 +61,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		74A620D31DEE8CD40034ABAB /* CollectionPushAndPoppable */ = {
+			isa = PBXGroup;
+			children = (
+				74A620CC1DEE86840034ABAB /* CollectionPushAndPoppable.swift */,
+				74A620CD1DEE86840034ABAB /* PopInAndOutAnimator.swift */,
+				74A620CE1DEE86840034ABAB /* PopInAndOutCollectionViewTransition.h */,
+				74A620CF1DEE86840034ABAB /* UIView+Screenshot.swift */,
+			);
+			name = CollectionPushAndPoppable;
+			sourceTree = "<group>";
+		};
 		74DE54991DECD2E000259BC7 = {
 			isa = PBXGroup;
 			children = (
@@ -73,7 +95,9 @@
 			children = (
 				74DE54A51DECD2E100259BC7 /* AppDelegate.swift */,
 				74DE54A91DECD2E100259BC7 /* AlbumCollectionViewController.swift */,
+				7479126F1DEF08D900067B7A /* AlbumCollectionViewCell.swift */,
 				74DE54A71DECD2E100259BC7 /* PhotoCollectionViewController.swift */,
+				747912711DEF090000067B7A /* PhotoCollectionViewCell.swift */,
 				74A620C81DEE70940034ABAB /* PhotoViewController.swift */,
 				74A620C21DECFC0F0034ABAB /* Photo.swift */,
 				74A620C41DECFC5B0034ABAB /* Cloud.swift */,
@@ -82,6 +106,7 @@
 				74DE54B01DECD2E100259BC7 /* LaunchScreen.storyboard */,
 				74DE54B31DECD2E100259BC7 /* Info.plist */,
 				74A620C61DEE62110034ABAB /* DateExtensions.swift */,
+				74A620D31DEE8CD40034ABAB /* CollectionPushAndPoppable */,
 			);
 			path = PhotoViewer;
 			sourceTree = "<group>";
@@ -230,8 +255,13 @@
 				74DE54AA1DECD2E100259BC7 /* AlbumCollectionViewController.swift in Sources */,
 				74A620C51DECFC5B0034ABAB /* Cloud.swift in Sources */,
 				74DE54A61DECD2E100259BC7 /* AppDelegate.swift in Sources */,
+				74A620D21DEE86840034ABAB /* UIView+Screenshot.swift in Sources */,
+				747912721DEF090000067B7A /* PhotoCollectionViewCell.swift in Sources */,
+				74A620D01DEE86840034ABAB /* CollectionPushAndPoppable.swift in Sources */,
 				74A620C91DEE70940034ABAB /* PhotoViewController.swift in Sources */,
 				74DE54A81DECD2E100259BC7 /* PhotoCollectionViewController.swift in Sources */,
+				74A620D11DEE86840034ABAB /* PopInAndOutAnimator.swift in Sources */,
+				747912701DEF08D900067B7A /* AlbumCollectionViewCell.swift in Sources */,
 				74A620C71DEE62110034ABAB /* DateExtensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
