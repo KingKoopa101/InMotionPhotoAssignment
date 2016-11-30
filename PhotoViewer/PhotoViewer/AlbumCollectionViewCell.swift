@@ -17,11 +17,11 @@ class AlbumCollectionViewCell : UICollectionViewCell {
     @IBOutlet weak var imageViewLeftBottom: UIImageView!
     @IBOutlet weak var albumIdLabel: UILabel!
     
-    func updateWithPhotos(photos:[Photo], albumId: Int){
+    func updateWithPhotos(photos:[Photo]){
         imageViewLeftTop.sd_setImage(with: NSURL(string: photos[0].thumbnailUrl!) as URL!)
         imageViewRightTop.sd_setImage(with: NSURL(string: photos[1].thumbnailUrl!) as URL!)
         imageViewRightBottom.sd_setImage(with: NSURL(string: photos[2].thumbnailUrl!) as URL!)
         imageViewLeftBottom.sd_setImage(with: NSURL(string: photos[3].thumbnailUrl!) as URL!)
-        albumIdLabel.text = "\(albumId)"
+        albumIdLabel.text = "\(photos[0].albumId!)"
     }
 }

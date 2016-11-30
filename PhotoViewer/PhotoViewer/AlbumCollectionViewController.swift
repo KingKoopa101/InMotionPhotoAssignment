@@ -121,14 +121,15 @@ extension AlbumCollectionViewController {
                                                       for: indexPath) as! AlbumCollectionViewCell
         
         // Configure the cell
+        /*TODO: Need to create an Album object to better handle the passing of [Photos] here, 
+         this only works because we are doing key value look up and the albumIds happen to start at 1 and run consecutively.*/
         guard let albumPhotos = albums[indexPath.row + 1] else {
             return cell
         }
         
-        //cell.layer.borderWidth = 0.5
         cell.frame.size.width = screenWidth / 3
         cell.frame.size.height = screenWidth / 3
-        cell.updateWithPhotos(photos:albumPhotos, albumId:indexPath.row + 1)
+        cell.updateWithPhotos(photos:albumPhotos)
         
         return cell
     }

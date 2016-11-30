@@ -16,7 +16,7 @@ class PhotoCollectionViewCell : UICollectionViewCell {
     @IBOutlet weak var title: UILabel!
     
     func updateWithPhoto(photo:Photo){
-        guard let nsurl = NSURL(string: photo.thumbnailUrl!),
+        guard let nsurl = NSURL(string: photo.url!),
             title != nil
             else {
                 return
