@@ -15,6 +15,8 @@ class Cloud {
     
     static let sharedInstance = Cloud()
     
+    var refreshTime : Date? = nil
+    
     let url = "http://jsonplaceholder.typicode.com/photos"
     
     func requestPhotos (completion: @escaping ([Photo]?, NSError?) -> Void) {
@@ -59,7 +61,7 @@ class Cloud {
                     organizedPhotosDict[photo.albumId!] = [photo]
                 }
             }
-            
+            self.refreshTime = Date()
             completion(organizedPhotosDict,nil)
         }
         //        let distinctAlbums1 = Set(unorganizedPhotos.map{$0.albumId}) //- wasnt able to get this working because of ObjectMapper implementation

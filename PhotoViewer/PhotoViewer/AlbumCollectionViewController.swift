@@ -8,17 +8,21 @@
 
 import UIKit
 
-class AlbumViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate  {
+class AlbumCollectionViewController: UICollectionViewController  {
     
     var refreshControl:UIRefreshControl!
     var screenSize: CGRect!
     var screenWidth: CGFloat!
     var screenHeight: CGFloat!
-    
+    var refreshControlString: String{
+        get {
+            guard let time = Cloud.sharedInstance.refreshTime else{
+                return "Pull to Refresh"
+            }
+            return time.toString() }
+    }
     
     fileprivate let reuseIdentifier = "AlbumCollectionViewCell"
-    
-    @IBOutlet weak var collectionView: UICollectionView!
     
     var albums:[Int:[Photo]] = [:]
 
@@ -37,11 +41,20 @@ class AlbumViewController: UIViewController, UICollectionViewDataSource, UIColle
     
     func addRefreshControl (){
         self.refreshControl = UIRefreshControl()
-        self.refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
+        self.refreshControl.attributedTitle = NSAttributedString(string: refreshControlString)
         self.refreshControl.addTarget(self, action: #selector(getAlbums), for: .valueChanged)
         collectionView!.addSubview(refreshControl)
     }
     
+    func updateView(withAlbums:[Int:[Photo]]){
+        albums = withAlbums
+        self.collectionView?.reloadData()
+        self.refreshControl.endRefreshing()
+        self.refreshControl.attributedTitle = NSAttributedString(string:self.refreshControlString)
+    }
+    
+    /*Collection View Layout for 2 columns*/
+
     func setupLayout(){
         screenSize = UIScreen.main.bounds
         screenWidth = screenSize.width
@@ -55,7 +68,6 @@ class AlbumViewController: UIViewController, UICollectionViewDataSource, UIColle
         collectionView!.collectionViewLayout = layout
     }
     
-    
     func getAlbums () {
         Cloud.sharedInstance.getAlbums{albums, error in
             
@@ -66,37 +78,36 @@ class AlbumViewController: UIViewController, UICollectionViewDataSource, UIColle
             //print(albums!)
             
             //todo guard
-            self.albums = albums!
-            self.collectionView.reloadData()
-            self.refreshControl.endRefreshing()
+            //self.albums =
+            self.updateView(withAlbums:albums!)
         }
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "PhotoCollectionSegue"{
             
-            if let indexPaths : [IndexPath] = self.collectionView.indexPathsForSelectedItems,
-               let indexPath : NSIndexPath = indexPaths[0] as? NSIndexPath,
-               let destinationVC = segue.destination as? PhotoViewController {
-                destinationVC.photos = albums[indexPath.row]!
+            if let indexPaths : [IndexPath] = self.collectionView?.indexPathsForSelectedItems,
+               let indexPath : NSIndexPath = indexPaths[0] as NSIndexPath,
+               let destinationVC = segue.destination as? PhotoCollectionViewController {
+                destinationVC.photos = albums[indexPath.row + 1]!
             }
         }
         
     }
 }
 
-extension AlbumViewController {
+extension AlbumCollectionViewController {
     
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
+    override func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
     
-    func collectionView(_ collectionView: UICollectionView,
+    override func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
         return albums.count
     }
     
-    func collectionView(_ collectionView: UICollectionView,
+    override func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier,
@@ -117,7 +128,7 @@ extension AlbumViewController {
     
     
     
-    func collectionView(_ collectionView: UICollectionView,
+    override func collectionView(_ collectionView: UICollectionView,
                                  didSelectItemAt indexPath: IndexPath)  {
         self.performSegue(withIdentifier: "PhotoCollectionSegue", sender: self)
     }
