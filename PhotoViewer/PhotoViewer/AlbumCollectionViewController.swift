@@ -73,12 +73,13 @@ class AlbumCollectionViewController: UICollectionViewController  {
             
             if error != nil{
                 //handle error
+                return
             }
             
-            //print(albums!)
+            guard albums != nil else{
+                return
+            }
             
-            //todo guard
-            //self.albums =
             self.updateView(withAlbums:albums!)
         }
     }

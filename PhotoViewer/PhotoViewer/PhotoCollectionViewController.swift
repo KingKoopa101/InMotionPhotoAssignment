@@ -29,8 +29,6 @@ class PhotoCollectionViewController: UICollectionViewController, UIViewControlle
         
         self.collectionView?.reloadData()
     }
-    
-    
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
