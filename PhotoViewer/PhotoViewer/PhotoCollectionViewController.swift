@@ -37,7 +37,7 @@ class PhotoCollectionViewController: UICollectionViewController, UIViewControlle
         
     }
     
-    /* pop over when selected */
+    /* custom pop over when the user selects an image */
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "PhotoViewControllerSegue"{
